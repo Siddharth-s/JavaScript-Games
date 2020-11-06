@@ -53,10 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
   ]
 
   cardArray.sort(() => 0.5 - Math.random())
-
   const grid = document.querySelector('.grid')
   const resultDisplay = document.querySelector('#result')
-  var cardChosen = []
+  var cardsChosen = []
   var cardsChosenId = []
   var cardsWon = []
 
@@ -66,21 +65,29 @@ document.addEventListener('DOMContentLoaded', () => {
       var card = document.createElement('img')
       card.setAttribute('src', 'images/blank.png')
       card.setAttribute('data-id', i)
-      card.addEventListener('click', flipcard)
+      card.addEventListener('click', flipCard)
       grid.appendChild(card)
     }
   }
 
   // check for matches
   function checkforMatch() {
+    
     var cards = document.querySelectorAll('img')
     const optionOneId = cardsChosenId[0]
     const optionTwoId = cardsChosenId[1]
-    if (cardsChosen[optionOneId] === cardChosen[optionTwoId]) {
+    
+    if(optionOneId == optionTwoId) {
+      cards[optionOneId].setAttribute('src', 'images/blank.png')
+      alert('You have clicked the same image!')
+    }
+    else if(cardsChosen[0] === cardsChosen[1]) {
       alert('You found a match')
       cards[optionOneId].setAttribute('src', 'images/white.png')
       cards[optionTwoId].setAttribute('src', 'images/white.png')
-      cardsWon.push(cardChosen)
+      cards[optionOneId].removeEventListener('click', flipCard)
+      cards[optionTwoId].removeEventListener('click', flipCard)
+      cardsWon.push(cardsChosen)
     } else {
       cards[optionOneId].setAttribute('src', 'images/blank.png')
       cards[optionTwoId].setAttribute('src', 'images/blank.png')
@@ -96,12 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   //flip your card
-  function flipcard() {
+  function flipCard() {
     var cardId = this.getAttribute('data-id')
-    cardChosen.push(cardArray[cardId].name)
+    cardsChosen.push(cardArray[cardId].name)
     cardsChosenId.push(cardId)
     this.setAttribute('src', cardArray[cardId].img)
-    if (cardChosen.length === 2) {
+    if (cardsChosen.length === 2) {
       setTimeout(checkforMatch, 500)
     }
   }
